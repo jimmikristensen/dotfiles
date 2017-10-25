@@ -37,7 +37,18 @@
 
 ;; line/col numbering
 (setq column-number-mode t)
-
+;;; If `display-line-numbers-mode' is available (only in Emacs 26),
+;;; use it! Otherwise, install and run nlinum-relative.
+(if (functionp 'display-line-numbers-mode)
+    (and (add-hook 'display-line-numbers-mode-hook
+                   (lambda () (setq display-line-numbers-type 'relative)))
+         (add-hook 'prog-mode-hook #'display-line-numbers-mode))
+  (use-package nlinum
+    :ensure t
+    :config
+    (setq nlinum-relative-redisplay-delay 0)
+    (add-hook 'prog-mode-hook #'nlinum-mode)))
+(setq nlinum-format "%4d \u2502") ;; add format to nlinum
 
 ;; Don't litter my init file
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
