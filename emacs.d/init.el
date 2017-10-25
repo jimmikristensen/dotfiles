@@ -16,6 +16,7 @@
                  (not (string-suffix-p "." filename)))
 (add-to-list 'load-path (car file))))))
 
+(require 'init-orgmode)
 (require 'init-elpa)
 
 (unless (package-installed-p 'use-package)
@@ -50,6 +51,13 @@
     (add-hook 'prog-mode-hook #'nlinum-mode)))
 (setq nlinum-format "%4d \u2502") ;; add format to nlinum
 
+;; auto-save and backup file location
+(setq backup-directory-alist
+      `((".*" . ,temporary-file-directory)))
+(setq auto-save-file-name-transforms
+      `((".*" ,temporary-file-directory t)))
+
 ;; Don't litter my init file
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
 (load custom-file 'noerror)
+
