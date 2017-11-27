@@ -6,6 +6,9 @@
 (setq package-enable-at-startup nil)
 (add-to-list 'load-path (expand-file-name "lisp" user-emacs-directory))
 
+;; asciidoctor
+(add-to-list 'auto-mode-alist (cons "\\.adoc\\'" 'adoc-mode))
+
 ;; Also add all directories within "lisp"
 ;; I use this for packages I'm actively working on, mostly.
 (let ((files (directory-files-and-attributes "~/.emacs.d/lisp" t)))
@@ -56,6 +59,26 @@
       `((".*" . ,temporary-file-directory)))
 (setq auto-save-file-name-transforms
       `((".*" ,temporary-file-directory t)))
+
+;; Dockerfile mode C-c C-b to build image
+;; https://github.com/spotify/dockerfile-mode
+;; ## -*- docker-image-name: "your-image-name-here" -*-
+(add-to-list 'load-path "~/.emacs.d/lisp/")
+(require 'dockerfile-mode)
+(add-to-list 'auto-mode-alist '("Dockerfile\\'" . dockerfile-mode))
+
+;; YAML lint
+(use-package flycheck-yamllint
+  :ensure t
+  :defer t
+  :init
+  (progn
+    (eval-after-load 'flycheck
+      '(add-hook 'flycheck-mode-hook 'flycheck-yamllint-setup))))
+
+(require 'flycheck-yamllint)
+(eval-after-load 'flycheck
+  '(add-hook 'flycheck-mode-hook 'flycheck-yamllint-setup))
 
 ;; Don't litter my init file
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
