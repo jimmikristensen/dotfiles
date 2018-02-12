@@ -57,6 +57,12 @@
 (setq auto-save-file-name-transforms
       `((".*" ,temporary-file-directory t)))
 
+;; Dockerfile syntax and build. You can specify the image name in the file itself by adding a line like this at the top of your Dockerfile.
+;; ## -*- docker-image-name: "your-image-name-here" -*-
+(add-to-list 'load-path "~/.emacs.d/lisp/")
+(require 'dockerfile-mode)
+(add-to-list 'auto-mode-alist '("Dockerfile\\'" . dockerfile-mode))
+
 ;; Don't litter my init file
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
 (load custom-file 'noerror)
